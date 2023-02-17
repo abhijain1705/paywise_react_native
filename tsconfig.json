@@ -1,0 +1,10 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "strict": true
+  },
+  "resolveJsonModule": true,
+  "esModuleInterop": true,
+  "typeRoots": ["./types"]
+}
