@@ -18,7 +18,7 @@ React-Native: For frontend
 Firebase: For backend
 
 ## Demo
-https://youtu.be/YacAROVf9K0
+https://youtu.be/EVJ2KQVmkOk
 
 ## 🧠 Challenges we ran into
 As coding along, I found a lot of challenges in 
