@@ -23,7 +23,7 @@ const Login = ({ navigation }: LoginScreenProps) => {
     const [loading, setloading] = useState(false);
     const [snackBarVisible, setsnackBarVisible] = useState(false);
     const [snackBarMessage, setsnackBarMessage] = useState("");
-    const [snackBarMessageType, setsnackBarMessageType] = useState("error");
+    const [snackBarMessageType, setsnackBarMessageType] = useState<"error" | "success">("error");
 
 
     const changePasswordText = (text: string) => {
@@ -53,7 +53,7 @@ const Login = ({ navigation }: LoginScreenProps) => {
                         setloading(value);
                     },
                     remember: rememberMe,
-                    callingSnackBar: (type: string, message: string) => {
+                    callingSnackBar: (type: "error"| "success", message: string) => {
                         setsnackBarVisible(true);
                         setsnackBarMessage(message);
                         setsnackBarMessageType(type);
@@ -83,7 +83,7 @@ const Login = ({ navigation }: LoginScreenProps) => {
                 <ForgotPassword navigateToForgotScreen={navigateToForgotScreen} />
                 <CheckBoxComponent rememberMe={rememberMe} changeRememberMeValue={changeRememberMeValue} />
                 <Text style={{ color: 'red' }}>{overAllError ? overAllError : ""}</Text>
-                <DefaultButton loading={loading} onPress={login} />
+                <DefaultButton title='Continue' loading={loading} onPress={login} />
                 <DidNotHaveAccount navigateToLoginScreen={navigateToSignupScreen} />
             </View>
             <SnackbarComponent message={snackBarMessage} type={snackBarMessageType} close={() => { setsnackBarVisible(false) }} visible={snackBarVisible} />

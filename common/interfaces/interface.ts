@@ -13,6 +13,7 @@ export interface PasswordProps {
 export interface FullNameProps {
   name: string;
   changeNameText: (text: string) => void;
+  title?: string;
 }
 
 export interface RememberMeProps {
@@ -31,6 +32,20 @@ export interface forgotPasswordProps {
 export interface UserInterface {
   email: string;
   name: string;
-  profilePic: string;
+  birthday: Date;
   remember: boolean;
+  fcmToken: string;
+  totalDebitValuation: number;
+  totalCreditValuation: number;
+}
+
+export interface EntryInterface {
+  partyName: string;
+  mobileNumber: string;
+  dueDate: Date;
+  message: string;
+  amount: string;
+  type: "collect" | "pay";
+  madeOn: Date;
+  uid: string;
 }

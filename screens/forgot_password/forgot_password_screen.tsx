@@ -13,7 +13,7 @@ const ForgotPasswordScreen = () => {
     const [loading, setloading] = useState(false);
     const [snackBarVisible, setsnackBarVisible] = useState(false);
     const [snackBarMessage, setsnackBarMessage] = useState("");
-    const [snackBarMessageType, setsnackBarMessageType] = useState("error");
+    const [snackBarMessageType, setsnackBarMessageType] = useState<"error" | "success">("error");
 
     const changeEmailText = (text: string) => {
         setEmail(text);
@@ -27,15 +27,11 @@ const ForgotPasswordScreen = () => {
                 timeCallback: (value: boolean) => {
                     setloading(value);
                 },
-                changeSnackbarMessage: (value: string) => {
-                    setsnackBarMessage(value);
-                },
-                changeSnackbarVisibility: () => {
+                callingSnackBar(type, mesage) {
                     setsnackBarVisible(true);
+                    setsnackBarMessage(mesage);
+                    setsnackBarMessageType(type);
                 },
-                changeSnackbarType: (value: string) => {
-                    setsnackBarMessageType(value);
-                }
             });
         }
     }
@@ -46,7 +42,7 @@ const ForgotPasswordScreen = () => {
                 <Text style={styles.head}>Forgot Password</Text>
                 <Text style={styles.subHeading}>write your email to reset password and to continue to your app</Text>
                 <EmailInput email={email} validEmail={validEmail} changeEmailText={changeEmailText} />
-                <DefaultButton loading={loading} onPress={resetPassword} />
+                <DefaultButton title='Continue' loading={loading} onPress={resetPassword} />
             </View>
             <SnackbarComponent message={snackBarMessage} type={snackBarMessageType} close={() => { setsnackBarVisible(false) }} visible={snackBarVisible} />
         </View>

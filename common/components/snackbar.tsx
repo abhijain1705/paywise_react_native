@@ -1,11 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Snackbar } from 'react-native-paper';
-import React, { useState } from 'react'
 
 interface SnackBarProps {
     message: string;
     visible: boolean;
-    type: string;
+    type: "error" | "success";
     close: () => void;
 }
 

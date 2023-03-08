@@ -43,10 +43,11 @@ export const textInputStyles = StyleSheet.create({
   input: {
       borderColor: 'gray',
       borderWidth: 1,
-      marginTop: 20,
+      marginTop: 10,
       borderRadius: 12,
       color: 'black',
-      padding: 12
+      padding: 12,
+      width: '100%'
   },
   error: {
       color: 'red'

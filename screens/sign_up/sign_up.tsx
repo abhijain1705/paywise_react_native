@@ -1,13 +1,15 @@
 import { Text, View } from 'react-native'
 import { styles } from '../../common/styles/styles';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { createAccount } from '../../firebase/auth/firebase_methods';
 import { EmailInput, PasswordInput, FullName, CheckBoxComponent, AlreadyHaveAccount } from '../../common/components/textInput';
 import { validateEmail, validatePassword } from '../../common/logic/validation';
 import DefaultButton from '../../common/components/defaultButton';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import SnackbarComponent from '../../common/components/snackbar';
-import { UserContext } from '../../context';
+import messaging from '@react-native-firebase/messaging';
+import DatePicker from '../../common/components/datePicker';
+import { checkPermission } from '../../common/logic/validation';
 
 interface SignUpScreenProps {
     navigation: NavigationProp<ParamListBase>
@@ -24,8 +26,7 @@ const SignUp = ({ navigation }: SignUpScreenProps) => {
     const [overAllError, setoverAllError] = useState("");
     const [snackBarVisible, setsnackBarVisible] = useState(false);
     const [snackBarMessage, setsnackBarMessage] = useState("");
-    const [snackBarMessageType, setsnackBarMessageType] = useState("error");
-
+    const [snackBarMessageType, setsnackBarMessageType] = useState<"error" | "success">("error");
 
     const changePasswordText = (text: string) => {
         setPassword(text);
@@ -49,23 +50,42 @@ const SignUp = ({ navigation }: SignUpScreenProps) => {
         navigation.navigate("Login");
     }
 
-    const signUp = () => {
+    const [birthday, setBirthday] = useState(new Date());
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+
+
+    const signUp = async () => {
         console.log(validePassword);
         if (validEmail && name.length > 0 && !validePassword) {
-            createAccount({
-                email, password,
-                name,
-                timeCallback: (value: boolean) => {
-                    setloading(value);
-                },
-                remember: rememberMe,
-                callingSnackBar: (type: string, message: string) => {
+            try {
+                const hasPermission = await checkPermission();
+                if (hasPermission) {
+                    const fcmToken = await messaging().getToken();
+                    createAccount({
+                        email, password,
+                        name,
+                        fcmToken,
+                        birthday,
+                        timeCallback: (value: boolean) => {
+                            setloading(value);
+                        },
+                        remember: rememberMe,
+                        callingSnackBar: (type: "error" | "success", message: string) => {
+                            setsnackBarVisible(true);
+                            setsnackBarMessage(message);
+                            setsnackBarMessageType(type);
+                        }
+                    });
+                    setoverAllError("");
+                } else {
                     setsnackBarVisible(true);
-                    setsnackBarMessage(message);
-                    setsnackBarMessageType(type);
+                    setsnackBarMessage("you have not allowed for permission.");
+                    setsnackBarMessageType("error");
                 }
-            });
-            setoverAllError("");
+            } catch (error) {
+                console.log('Error sending push notification:', error);
+            }
         } else {
             setoverAllError("please fill details first");
             setTimeout(() => {
@@ -82,9 +102,10 @@ const SignUp = ({ navigation }: SignUpScreenProps) => {
                 <EmailInput email={email} validEmail={validEmail} changeEmailText={changeEmailText} />
                 <PasswordInput password={password} changePasswordText={changePasswordText} validePassword={validePassword} />
                 <FullName name={name} changeNameText={changeNameText} />
+                <DatePicker label='Write BirthDay Date' setDate={setBirthday} setShowDatePicker={setShowDatePicker} date={birthday} showDatePicker={showDatePicker} />
                 <CheckBoxComponent rememberMe={rememberMe} changeRememberMeValue={changeRememberMeValue} />
                 <Text style={{ color: 'red' }}>{overAllError ? overAllError : ""}</Text>
-                <DefaultButton loading={loading} onPress={signUp} />
+                <DefaultButton title='Continue' loading={loading} onPress={signUp} />
                 <AlreadyHaveAccount navigateToLoginScreen={navigateToLoginScreen} />
             </View>
             <SnackbarComponent message={snackBarMessage} type={snackBarMessageType} close={() => { setsnackBarVisible(false) }} visible={snackBarVisible} />

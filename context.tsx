@@ -18,7 +18,6 @@ type UserProviderProps = {
 };
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children, user, setUser }) => {
-  
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

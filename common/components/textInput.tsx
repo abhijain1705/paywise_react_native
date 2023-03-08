@@ -3,7 +3,7 @@ import { CheckBox } from 'react-native-elements';
 import React, { useState } from 'react';
 import { textInputStyles } from '../styles/styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { EmailProps, PasswordProps, FullNameProps, RememberMeProps,forgotPasswordProps, AuthScreenNavigateProps } from '../interfaces/interface';
+import { EmailProps, PasswordProps, FullNameProps, RememberMeProps, forgotPasswordProps, AuthScreenNavigateProps } from '../interfaces/interface';
 
 
 const EmailInput = (props: EmailProps) => {
@@ -55,14 +55,15 @@ const PasswordInput = (props: PasswordProps) => {
 }
 
 const FullName = (props: FullNameProps) => {
-    const { name, changeNameText } = props;
+    const { name, changeNameText, title } = props;
     return (
-        <View>
+        <View style={{ width: '100%' }}>
             <TextInput
                 style={{ ...textInputStyles.input }}
                 onChangeText={changeNameText}
                 value={name}
-                placeholder={"Enter Full Name"}
+                maxLength={25}
+                placeholder={title !== undefined ? title : "Enter Full Name"}
                 placeholderTextColor={'black'}
             />
         </View>

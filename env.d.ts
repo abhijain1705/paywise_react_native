@@ -5,4 +5,5 @@ declare module '@env' {
     export const CHANNEL_ID: string;
     export const FIREBASE_API: string;
     export const SERVER_API_KEY: string;
+    export const API_ENTRY_DOC: string;
 }
